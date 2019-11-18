@@ -1,43 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>大事件-后台登录页</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="css/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <!-- 引入bootstrap的css文件 -->
+    <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css" />
+    <!-- 引入jq文件 -->
+    <script src="./libs/jquery-1.12.4.min.js"></script>
+    <!-- 引入bootstrap的js文件 -->
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 引入http的js文件 -->
+    <script src="./libs/http.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>大事件-后台登录页</title>
-  <link rel="stylesheet" type="text/css" href="css/reset.css" />
-  <link rel="stylesheet" type="text/css" href="css/iconfont.css" />
-  <link rel="stylesheet" type="text/css" href="css/main.css" />
-  <!-- 引入bootstrap的css文件 -->
-  <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css" />
-  <!-- 引入jq文件 -->
-  <script src="./libs/jquery-1.12.4.min.js"></script>
-  <!-- 引入bootstrap的js文件 -->
-  <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
-</head>
+  <body>
+    <div class="main_wrap">
+      <div class="header">
+        <a href="#" class="logo"><img src="images/logo.png" alt=""/></a>
+        <div class="copyright">
+          CopyRight © 2019 深圳百秀信息技术股份有限公司<br />All Rights Reserved
+        </div>
+      </div>
 
-<body>
-  <div class="main_wrap">
-    <div class="header">
-      <a href="#" class="logo"><img src="images/logo.png" alt="" /></a>
-      <div class="copyright">
-        CopyRight © 2019 深圳百秀信息技术股份有限公司<br />All Rights Reserved
+      <div class="login_form_con">
+        <div class="login_title"></div>
+        <form class="login_form">
+          <i class="iconfont icon-user"></i>
+          <i class="iconfont icon-key"></i>
+          <input type="text" class="input_txt" placeholder="邮箱/手机号" />
+          <input type="password" class="input_pass" placeholder="密码" />
+          <input type="submit" class="input_sub " value="登 录" />
+        </form>
       </div>
     </div>
-
-    <div class="login_form_con">
-      <div class="login_title"></div>
-      <form class="login_form">
-        <i class="iconfont icon-user"></i>
-        <i class="iconfont icon-key"></i>
-        <input type="text" class="input_txt" placeholder="邮箱/手机号" />
-        <input type="password" class="input_pass" placeholder="密码" />
-        <input type="submit" class="input_sub" value="登 录" />
-      </form>
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">
+              确定
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-
-</body>
-
+    <script>
+      //使用jQuery来处理,先设置好入口函数
+      $(function() {
+        //  登录的逻辑
+        // 1.先获取登录按钮，给登录按钮注册点击事件
+        $(".input_sub").on("click", function(e) {
+          //这个按钮是一个submit按钮，会默认跳转，我们需要阻止其默认行为
+          e.preventDefault();
+          // 2.点击的时候获取用户名和密码  我们要去除用户名和密码前后的空格
+          var userName = $(".input_txt")
+            .val()
+            .trim();
+          var userPwd = $(".input_pass")
+            .val()
+            .trim();
+          // 3.非空判断
+          if (userName == "" || userPwd == "") {
+            // alert('亲，请输入用户名或者密码');
+            $("#myModal").modal();
+            $(".modal-body").text("亲，用户名和密码不能为空哦");
+            return;
+          }
+          // 4.使用ajax请求数据，做页面渲染
+          $.ajax({
+            type: "post",
+            // url: "http://localhost:8080/api/v1/admin/user/login",
+            url: window.BigNew.user_login,
+            data: {
+              username: userName,
+              password: userPwd
+            },
+            success: function(res) {
+              $("#myModal").modal();
+              $(".modal-body").text(res.msg);
+              //判断用户名或者密码是否正确
+              if (res.code == 200) {
+                $("#myModal").on("hidden.bs.modal", function(e) {
+                  window.location.href = "./index.html";
+                });
+                window.localStorage.setItem("token", res.token);
+                // alert("欢迎回家，亲");
+                //跳转的网站的首页
+                // window.location.href = "./index.html";
+              }
+            }
+          });
+        });
+      });
+    </script>
+  </body>
 </html>
