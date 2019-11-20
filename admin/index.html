@@ -35,7 +35,7 @@
           >
         </div>
         <div class="level01">
-          <a href="./article_list.html"
+          <a href="#"
             ><i class="iconfont icon-icon-article"></i><span>文章管理</span
             ><b class="iconfont icon-arrowdownl"></b
           ></a>
@@ -85,7 +85,7 @@
       <!-- 右侧主体内容 -->
       <div class="main" id="main_body">
         <iframe
-          src=""
+          src="./main_count.html"
           frameborder="0"
           name="main_frame"
           style="width: 100%;height: 100%;"
@@ -109,6 +109,25 @@
         $(".logout").on("click", function() {
           window.localStorage.removeItem("token");
           window.location.href = "./login.html";
+        });
+        $("div.level01").on("click", function() {
+          $(this)
+            .addClass("active")
+            .siblings("div")
+            .removeClass("active");
+          if ($(this).index() === 1) {
+            $("ul.level02").toggle();
+            $("ul.level02 li:eq(0)>a")[0].click();
+            $(this)
+              .find("b")
+              .toggleClass("rotate0");
+          }
+        });
+        $("ul.level02 li").on("click", function() {
+          $(this)
+            .addClass("active")
+            .siblings("li")
+            .removeClass("active");
         });
       });
     </script>
