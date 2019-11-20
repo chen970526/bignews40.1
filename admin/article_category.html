@@ -226,7 +226,23 @@
             }
           });
         });
-        $("tbody");
+        $("tbody").on("click", ".btn-delete", function() {
+          var ans = confirm("删除？");
+          var deleteId = $(this).attr("data-id");
+          console.log(deleteId);
+          if (ans) {
+            $.post({
+              url: BigNew.category_delete,
+              data: {
+                id: deleteId
+              },
+              success: function(res) {
+                // console.log(res);
+                getData();
+              }
+            });
+          }
+        });
       });
     </script>
   </body>
