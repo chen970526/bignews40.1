@@ -38,7 +38,7 @@ $(function() {
           id: cateId
         },
         success: function(res) {
-          // console.log(res);
+          console.log(res);
 
           if (res.code === 200) {
             $("#recipient-name").val(res.data[0].name);

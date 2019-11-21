@@ -210,6 +210,10 @@
         //给删除按钮注册点击事件
         $("tbody").on("click", ".delete", function() {
           var deleteId = $(this).attr("data-id");
+          //   console.log($(this));
+          //   console.dir($(this));
+          //   console.log(deleteId);
+
           if (confirm("要删除吗？")) {
             $.post({
               url: BigNew.article_delete,
@@ -217,25 +221,27 @@
                 id: deleteId
               },
               success: function(res) {
-                console.log(res);
-                $.get({
-                  url: BigNew.article_query,
-                  data: {
-                    type: $("#selCategory").val(),
-                    state: $("#selStatus").val(),
-                    page: myPage,
-                    perpage: perpage
-                  },
-                  success: function(res) {
-                    var htmlStr = template("art-list", res);
-                    $("tbody").html(htmlStr);
-                    $("#pagination-demo").twbsPagination(
-                      "changeTotalPages",
-                      res.data.totalPage,
-                      1
-                    );
-                  }
-                });
+                if (res.code === 204) {
+                  // console.log(res);
+                  $.get({
+                    url: BigNew.article_query,
+                    data: {
+                      type: $("#selCategory").val(),
+                      state: $("#selStatus").val(),
+                      page: myPage,
+                      perpage: perpage
+                    },
+                    success: function(res) {
+                      var htmlStr = template("art-list", res);
+                      $("tbody").html(htmlStr);
+                      $("#pagination-demo").twbsPagination(
+                        "changeTotalPages",
+                        res.data.totalPage,
+                        1
+                      );
+                    }
+                  });
+                }
               }
             });
           }
