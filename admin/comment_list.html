@@ -286,6 +286,88 @@
         });
 
         //给拒绝按钮注册事件  comment_reject
+        $("tbody").on("click", ".btn-deny", function(e) {
+          var id = $(this).attr("data-id");
+          e.preventDefault(),
+            $.post({
+              url: BigNew.comment_reject,
+              data: { id: id },
+              success: function(res) {
+                // console.log(res);
+                $.get({
+                  url: BigNew.comment_list,
+                  data: {
+                    page: myPage,
+                    perpage: perpage
+                  },
+                  success: function(res) {
+                    if (res.code == 200) {
+                      var htmlStr = template("comment", res);
+                      $("tbody").html(htmlStr);
+                    }
+                  }
+                });
+              }
+            });
+        });
+        //给通过/批准按钮注册事件 comment_pass
+        $("tbody").on("click", ".btn-pass", function(e) {
+          var id = $(this).attr("data-id");
+          e.preventDefault(),
+            $.post({
+              url: BigNew.comment_pass,
+              data: { id: id },
+              success: function(res) {
+                // console.log(res);
+                $.get({
+                  url: BigNew.comment_list,
+                  data: {
+                    page: myPage,
+                    perpage: perpage
+                  },
+                  success: function(res) {
+                    if (res.code == 200) {
+                      var htmlStr = template("comment", res);
+                      $("tbody").html(htmlStr);
+                    }
+                  }
+                });
+              }
+            });
+        });
+
+        //给删除按钮注册事件 comment_delete
+        $("tbody").on("click", ".btn-delete", function(e) {
+          var id = $(this).attr("data-id");
+          e.preventDefault();
+          if (confirm("要删除吗？")) {
+            $.post({
+              url: BigNew.comment_delete,
+              data: { id: id },
+              success: function(res) {
+                // console.log(res);
+                $.get({
+                  url: BigNew.comment_list,
+                  data: {
+                    page: myPage,
+                    perpage: perpage
+                  },
+                  success: function(res) {
+                    if (res.code == 200) {
+                      var htmlStr = template("comment", res);
+                      $("tbody").html(htmlStr);
+                      $("#pagination-demo").twbsPagination(
+                        "changeTotalPages",
+                        res.data.totalPage,
+                        1
+                      );
+                    }
+                  }
+                });
+              }
+            });
+          }
+        });
       });
     </script>
   </body>
