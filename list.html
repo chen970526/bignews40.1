@@ -16,11 +16,12 @@
     />
 
     <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
-    <script src="./admin/libs/template-web.js"></script>
+    <!-- <script src="./admin/libs/template-web.js"></script> -->
 
-    <link rel="stylesheet" href="./admin/libs/bootstrap/js/bootstrap.min.js" />
-    <script type="text/javascript" src="js/jquery.pagination.min.js"></script>
+    <!-- <link rel="stylesheet" href="./admin/libs/bootstrap/js/bootstrap.min.js" /> -->
+
     <!-- 添加分页的插件js文件 -->
+
     <script src="./admin/libs/jquery.twbsPagination.js"></script>
   </head>
 
@@ -231,6 +232,7 @@
         </div>
 
         <div class="row text-center">
+          <!-- 分页插件 -->
           <ul id="pagination-demo" class="pagination-sm"></ul>
         </div>
         <!-- <div id="pagination" class="page"></div>
@@ -403,24 +405,30 @@
 
     <script>
       $(function() {
-        $("#pagination-demo").twbsPagination({
-          totalPages: res.data.totalPage,
-          visiblePages: 7,
-          first: "首页",
-          prev: "上一页",
-          next: "下一页",
-          last: "尾页",
-          onPageClick: function(event, page) {}
-        });
+        var myPage = 2;
+        var perpage = 6;
         $.get({
           url: BigNew.index_search,
+          data: {
+            page: myPage,
+            perpage: perpage
+          },
           success: function(res) {
-            // console.log(res);
+            console.log(res);
 
             var htmlStr = template("list", res);
             // console.log(htmlStr);
 
             $("#baba").html(htmlStr);
+            $("#pagination-demo").twbsPagination({
+              totalPages: res.data.totalCount,
+              visiblePages: 8,
+              first: "首页",
+              prev: "上一页",
+              next: "下一页",
+              last: "尾页",
+              onPageClick: function(event, page) {}
+            });
           }
         });
 
