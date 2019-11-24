@@ -420,10 +420,10 @@
         $.get({
           url: BigNew.index_latest_comment,
           success: function(res) {
-            console.log(res);
+            // console.log(res);
 
             var htmlStr = template("newComment", res);
-            console.log(htmlStr);
+            // console.log(htmlStr);
 
             $(".comment_list").html(htmlStr);
           }
@@ -431,13 +431,29 @@
         $.get({
           url: BigNew.index_attention,
           success: function(res) {
-            console.log(res);
+            // console.log(res);
 
             var htmlStr = template("focus", res);
-            console.log(htmlStr);
+            // console.log(htmlStr);
 
             $(".guanzhu_list").html(htmlStr);
           }
+        });
+        $("i.fa-search").on("click", function() {
+          $.get({
+            url: BigNew.index_search,
+            data: {
+              key: $(".search_txt").val(),
+              type: $(".search_txt").val(),
+              page: 1
+            },
+            success: function(res) {
+              // console.log(res);
+              if (res.code === 200) {
+                window.location.href = "list.html?id=" + res.data.data.id;
+              }
+            }
+          });
         });
       });
     </script>

@@ -60,7 +60,7 @@
           <div id="nei_rong"></div>
         
 
-        <form action="" class="comment_form">
+        <form action="" class="comment_form" >
           <div class="form_group">
             <label>用户名：</label>
             <input
@@ -344,6 +344,35 @@ $('#this_comment').html(htmlStr)
             $(".guanzhu_list").html(htmlStr);
           }
         });
+
+        $('.comment_sub').on('click',function(e){
+          e.preventDefault();
+         $.post({
+           url:BigNew.index_post_comment,
+           data:{
+            author:$('.comment_name').val(),
+            content:$('.comment_input').val(),
+            articleId:location.search.slice(4)
+           },
+           success(res){
+            if(res.code === 201){
+alert('发布成功')
+              $.get({
+        url:BigNew.index_get_comment,
+        data:{ articleId: location.search.slice(4) },
+        success:function(res){
+            console.log(res);
+          
+            var htmlStr = template("comment", res);
+// console.log(htmlStr);
+$('#this_comment').html(htmlStr)
+        }
+    })
+            }
+             
+           }
+         })
+        })
     })
     </script>
   </body>

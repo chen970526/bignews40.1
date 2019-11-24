@@ -405,13 +405,13 @@
 
     <script>
       $(function() {
-        var myPage = 2;
+        var myPage = 1;
         var perpage = 6;
         $.get({
           url: BigNew.index_search,
           data: {
-            page: myPage,
-            perpage: perpage
+            page: 1
+            // perpage: perpage
           },
           success: function(res) {
             console.log(res);
@@ -427,7 +427,24 @@
               prev: "上一页",
               next: "下一页",
               last: "尾页",
-              onPageClick: function(event, page) {}
+              onPageClick: function(event, page) {
+                myPage = page;
+                $.get({
+                  url: BigNew.index_search,
+                  data: {
+                    page: myPage,
+                    perpage: perpage
+                  },
+                  success: function(res) {
+                    console.log(res);
+
+                    var htmlStr = template("list", res);
+                    // console.log(htmlStr);
+
+                    $("#baba").html(htmlStr);
+                  }
+                });
+              }
             });
           }
         });
